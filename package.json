@@ -1,6 +1,11 @@
 {
   "scripts": {
-    "start": "nodemon index.js"
+    "prisma:generate": "prisma generate",
+    "prisma:dbpush": "prisma db push",
+    "start": "nodemon index.js",
+    "devStart": "nodemon index.js",
+    "dev": "yarn prisma:generate && yarn prisma:dbpush && yarn devStart",
+    "build": "yarn prisma:generate && yarn prisma:dbpush && nodemon index.js"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -13,6 +18,7 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "nodemailer": "^6.9.13",
-    "stripe": "^15.8.0"
+    "stripe": "^15.8.0",
+    "nodemon": "^3.1.2"
   }
 }
