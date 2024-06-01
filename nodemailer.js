@@ -5,8 +5,8 @@ const nodemailer = nm.createTransport({
   service: "gmail",
   secure: false,
   auth: {
-    user: "namankatewa@gmail.com",
-    pass: "shax fwoa qmqu jopb",
+    user: `${process.env.EMAIL_ID}`,
+    pass: `${process.env.EMAIL_PASS}`,
   },
   debug: false,
   logger: true,

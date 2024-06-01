@@ -1,5 +1,8 @@
 const nodemailer = require("../nodemailer");
 const db = require("../db");
+const express = require("express");
+const router = express.Router();
+const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 
 router.post("/checkout", async (req, res) => {
   const { items } = req.body;
@@ -75,8 +78,8 @@ router.post("/checkout", async (req, res) => {
       shipping_address_collection: {
         allowed_countries: ["IN"],
       },
-      success_url: `http://localhost:3000/order/?sessionId={CHECKOUT_SESSION_ID}&orderId=${order.id}`,
-      cancel_url: "http://localhost:3000/",
+      success_url: `${process.env.CLIENT_URL}order/?sessionId={CHECKOUT_SESSION_ID}&orderId=${order.id}`,
+      cancel_url: `${process.env.CLIENT_URL}`,
     });
     res.status(200).json(session.url);
   } catch (err) {
@@ -105,7 +108,7 @@ router.get("/confirm", async (req, res) => {
       });
 
       await nodemailer.sendMail({
-        from: "namankatewa@gmail.com",
+        from: `${process.env.EMAIL_ID}`,
         to: session.customer_details.email,
         subject: `Your order of ${JSON.parse(data.items).length} Posters`,
         text: `Your order of ${
