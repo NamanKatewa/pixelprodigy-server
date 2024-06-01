@@ -5,7 +5,7 @@
     "start": "nodemon index.js",
     "devStart": "nodemon index.js",
     "dev": "yarn prisma:generate && yarn prisma:dbpush && yarn devStart",
-    "build": "yarn prisma:generate && yarn prisma:dbpush && nodemon index.js"
+    "build": " yarn install && yarn prisma:generate && yarn prisma:dbpush && nodemon index.js"
   },
   "devDependencies": {
     "@types/bun": "latest"
