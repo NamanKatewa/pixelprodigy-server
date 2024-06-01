@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product{
+  id String @id @default(cuid())
+  name String
+  description String
+  squareImg String
+  posterImg String
+  mockupImg String[]
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id])
+  sizes Size[] @relation("ProductSize")
+  created_at DateTime @default(now())
+}
+
+model Category{
+  id String @id @default(cuid())
+  name String
+  created_at DateTime @default(now())
+  products Product[]
+}
+
+model Frame{
+  id String @id @default(cuid())
+  name String
+  sizes Size[]
+}
+
+model Size{
+  id String @id @default(cuid())
+  name String
+  price Float
+  frameId String
+  frame Frame @relation(fields: [frameId],references: [id])
+  products Product[] @relation("ProductSize")
+}
+
+model Order{
+  id String @id @default(cuid())
+  email String
+  address String
+  items String
+  name String
+  payment Payment
+  status Status
+}
+
+enum Status{
+  PENDING
+  COMPLETED
+}
+
+enum Payment{
+  PENDING
+  COMPLETED
+}
