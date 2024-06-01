@@ -18,7 +18,8 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "nodemailer": "^6.9.13",
-    "stripe": "^15.8.0",
-    "nodemon": "^3.1.2"
+    "nodemon": "^3.1.2",
+    "prisma": "^5.14.0",
+    "stripe": "^15.8.0"
   }
 }
