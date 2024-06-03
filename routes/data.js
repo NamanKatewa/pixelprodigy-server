@@ -223,6 +223,7 @@ router.get("/product/:id", async (req, res) => {
       id: product.id,
       name: product.name,
       posterImg: product.posterImg,
+      squareImg: product.squareImg,
       description: product.description,
       mockupImg: product.mockupImg,
       categoryId: product.categoryId,

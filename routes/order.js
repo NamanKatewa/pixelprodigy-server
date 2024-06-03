@@ -50,6 +50,10 @@ router.post("/checkout", async (req, res) => {
       }
     }
 
+    let amount = 0;
+
+    items.map((item) => (amount += item.size.price * item.quantity));
+
     const order = await db.order.create({
       data: {
         items: JSON.stringify(items),
@@ -58,6 +62,7 @@ router.post("/checkout", async (req, res) => {
         email: "",
         address: "",
         name: "",
+        amount: amount,
       },
     });
 
@@ -103,17 +108,35 @@ router.get("/confirm", async (req, res) => {
           payment: "COMPLETED",
           email: session.customer_details.email,
           name: session.customer_details.name,
-          address: `${address.line1}${address.line2}${address.city}${address.state}${address.country}${address.postal}`,
+          address: `${address.line1} ${address.line2} ${address.city} ${address.state} ${address.country} ${address.postal_code}`,
         },
       });
+
+      let itemList = "";
+
+      const items = JSON.parse(data.items);
+
+      items.forEach((item, index) => {
+        itemList += `${index + 1}. ${item.title} - ${
+          item.size.name
+        }, Quantity: ${item.quantity}, Price: ${
+          item.size.price * item.quantity
+        } INR\n`;
+      });
+
+      const invoice = ` <h2>Order Invoice - Order ID: ${orderId}</h2>
+      <p>Thank you for your order! Below is the summary of your purchase:</p>
+      <p><strong>Items:</strong></p>
+      <pre>${itemList}</pre>
+      <p><strong>Total Amount: ${data.amount} INR</strong></p>
+      <p>Your order has been received by Pixel Prodigy and will be dispatched soon.</p>
+      <p>Thank you for shopping with us!</p>`;
 
       await nodemailer.sendMail({
         from: `${process.env.EMAIL_ID}`,
         to: session.customer_details.email,
-        subject: `Your order of ${JSON.parse(data.items).length} Posters`,
-        text: `Your order of ${
-          JSON.parse(data.items).length
-        } Posters has been recieved by Pixel Prodigy. And soon will be dispatched`,
+        subject: `Your order confirmation - Order ID: ${data.id}`,
+        html: invoice,
       });
 
       res.status(200).json("Order confirmed");

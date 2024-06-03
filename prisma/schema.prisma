@@ -50,6 +50,8 @@ model Order{
   name String
   payment Payment
   status Status
+  amount Float
+  created_at DateTime @default(now())
 }
 
 enum Status{
