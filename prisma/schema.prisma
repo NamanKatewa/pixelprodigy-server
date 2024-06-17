@@ -48,11 +48,13 @@ model Order{
   address String
   items String
   name String
+  number String
   payment Payment
-  status Status
+  status Status  
   amount Float
   created_at DateTime @default(now())
 }
+
 
 enum Status{
   PENDING

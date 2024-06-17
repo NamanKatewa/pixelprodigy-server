@@ -134,6 +134,11 @@ router.get("/category/:id", async (req, res) => {
   const skip = (parseInt(page) - 1) * parseInt(size);
 
   try {
+    const category = await db.category.findFirst({
+      where: {
+        id: id,
+      },
+    });
     const products = await db.product.findMany({
       where: {
         categoryId: id,
@@ -169,7 +174,9 @@ router.get("/category/:id", async (req, res) => {
       };
     });
 
-    res.status(200).json({ products: productsWithMinPrice, nextPage });
+    res
+      .status(200)
+      .json({ products: productsWithMinPrice, nextPage, title: category.name });
   } catch (err) {
     console.log(err);
   }
